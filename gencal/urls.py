@@ -1,5 +1,4 @@
 from django.conf.urls.defaults import *
-from django.views.generic.simple import direct_to_template
 
 urlpatterns = patterns('gencal.views',
     url(r'^(?P<calslug>.*)/(?P<year>\d{4})/(?P<month>\d{2})/(?P<day>\d{2})/$', 'calendar', name="genericcalendar-date"),

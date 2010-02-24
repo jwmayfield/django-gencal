@@ -11,6 +11,9 @@ SITE_ID = 1
 USE_I18N = False
 ADMIN_MEDIA_PREFIX = '/media/'
 
+MEDIA_ROOT = 'CHANGEME-/path/to/media/files'
+MEDIA_URL = 'CHANGEME'
+
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'xe!yd54a@l%ynm62-tv()r9u6+lc@yoldu(=7_d6(t^vjb$p^n'
 
@@ -33,6 +36,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    'CHANGEME-/path/to/templates/',
 )
 
 INSTALLED_APPS = (
@@ -42,5 +46,6 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.admin',
     'bills',
+    'events',
     'gencal',
 )
