@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Calendars</h1>
+    {% if object_list %}
+    <ul>
+    {% for obj in object_list %}
+        <li><a href="{% url genericcalendar-default obj.slug %}">{{ obj.name }}</a></li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+{% endblock %}

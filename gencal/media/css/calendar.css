@@ -1,0 +1,14 @@
+/* Sample CSS for the calendar */
+table.month { padding: 0px; margin: 0px; }
+table.month th, table.month td { 
+  margin: 0px; padding: 5px; 
+}
+table th.month { font-size: xx-large; text-align: center; }
+th.mon, th.tue, th.wed, th.thu, th.fri, th.sat, th.sun {
+  border-bottom: 1px solid #aaa;
+  width: 80px;
+}
+table.month td { vertical-align: top; border-left: 1px solid #aaa; border-bottom: 1px solid #aaa; height: 90px; }
+table.month td:last-child { border-right: 1px solid #aaa; }
+table.month ul, table.month ul li { margin: 0px; padding: 0px; }
+table.month ul li { list-style-type: none; font-size: small; }

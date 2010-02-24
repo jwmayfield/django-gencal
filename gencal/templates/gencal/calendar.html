@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block head %}
+    {{ block.super }}
+    {# Replace this with Actual link to CSS files #}
+    <link rel="stylesheet" href="{{ MEDIA_URL }}gencal/css/calendar.css" type="text/css" media="screen"/> 
+{% endblock %}
+
+{% block content %}
+    {% load gencal %}    
+    {% if object_list %}
+        {% gencal object_list year month cal_class %}
+    {% else %}
+        {# object_list is empty, so use the template tag without any arguments. #}
+        {% gencal object_list  %}
+    {% endif %}
+{% endblock %}
