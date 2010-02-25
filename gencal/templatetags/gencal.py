@@ -1,8 +1,9 @@
-import datetime
-import calendar
-from django.utils.datastructures import SortedDict
-from calendar import HTMLCalendar, Calendar
+from calendar import HTMLCalendar
+from datetime import date, datetime
+
 from django import template
+from django.template.loader import render_to_string
+from django.utils.datastructures import SortedDict
 
 register = template.Library()
 
@@ -29,14 +30,14 @@ def gencal(obj_list, year=None, month=None, calendar_class=None):
     :returns: calendar as HTML
     :rtype: str.
     """
-    today = datetime.date.today()
+    today = date.today()
     if not year:
         year = today.year
     if not month:
         month = today.month
     if not calendar_class:
         calendar_class = ListCalendar
-    return ''.join(calendar_class(obj_list).formatmonth(year, month))
+    return calendar_class(obj_list).formatmonth(year, month)
 
 class ListCalendar(HTMLCalendar):
     """
@@ -77,7 +78,7 @@ class ListCalendar(HTMLCalendar):
     """
 
     def __init__(self, cal_items, year=None, month=None, *args, **kwargs):
-        today = datetime.date.today()
+        today = date.today()
 
         if year == None:
             year = today.year
@@ -102,7 +103,7 @@ class ListCalendar(HTMLCalendar):
                 possible_date = item.get(self.date_field)
             else:
                 possible_date = getattr(item, self.date_field)
-            if type(possible_date) == datetime.datetime:
+            if type(possible_date) == datetime:
                 # transform possible_date to a date, not a datetime
                 possible_date = possible_date.date()
             if possible_date:
@@ -118,11 +119,8 @@ class ListCalendar(HTMLCalendar):
         :arg weekday: Weekday of given day.
         :type weekday: int.
         """
-        link = self.get_link(day)
-        if link:
-            # return link
-            return '<td><a href="%s">%d</a></td>' % (self.get_link(day),  day.day)
-        return '<td>%d</td>' % (day.day)
+        return render_to_string('gencal/formatday.html',
+                {'link': self.get_link(day), 'day': day.day})
 
     def get_link(self, dt):
         """
@@ -153,6 +151,41 @@ class ListCalendar(HTMLCalendar):
         """
         return [[(dt, dt.weekday()) for dt in week] for week in self.monthdatescalendar(year, month)]
 
+    def formatweek(self, theweek):
+        """
+        Return a complete week as a table row.
+        """
+        days = [self.formatday(d, wd) for (d, wd) in theweek]
+        return render_to_string('gencal/formatweek.html', {'days': days})
+
+    def formatweekday(self, day):
+        """
+        Return a weekday name as a table header.
+        """
+        from calendar import day_abbr
+        return render_to_string('gencal/formatweekday.html',
+                {'class': self.cssclasses[day], 'weekday': day_abbr[day]})
+
+    def formatweekheader(self):
+        """
+        Return a header for a week as a table row.
+        """
+        weekdays = [self.formatweekday(i) for i in self.iterweekdays()]
+        return render_to_string('gencal/formatweekheader.html',
+                {'weekdays': weekdays})
+
+    def formatmonthname(self, theyear, themonth, withyear=True):
+        """
+        Return a month name as a table row.
+        """
+        from calendar import month_name
+        if withyear:
+            s = '%s %s' % (month_name[themonth], theyear)
+        else:
+            s = '%s' % month_name[themonth]
+        return render_to_string('gencal/formatmonthname.html',
+                {'month_name': s})
+
     def formatmonth(self, theyear, themonth, withyear=True):
         """
         Return a formatted month as a table.
@@ -167,18 +200,9 @@ class ListCalendar(HTMLCalendar):
         :keyword withyear: If true, it will show the year in the header.
         :type withyear: bool.
         """
-        v = []
-        a = v.append
- 
-        a('<table border="0" cellpadding="0" cellspacing="0" class="month">')
-        a('\n')
-        a(self.formatmonthname(theyear, themonth, withyear=withyear))
-        a('\n')
-        a(self.formatweekheader())
-        a('\n')
-        for week in self.monthdates2calendar(theyear, themonth):
-            a(self.formatweek(week))
-            a('\n')
-        a('</table>')
-        a('\n')
-        return v
+        weeks = [self.formatweek(week) for week in
+                self.monthdates2calendar(theyear, themonth)]
+        return render_to_string('gencal/formatmonth.html',
+                {'month_name': self.formatmonthname(theyear, themonth,
+                    withyear=withyear), 'week_header': self.formatweekheader(),
+                    'weeks': weeks})
