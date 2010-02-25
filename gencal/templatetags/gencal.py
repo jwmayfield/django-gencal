@@ -127,7 +127,8 @@ class ListCalendar(HTMLCalendar):
         else:
             day = 0
         return render_to_string('gencal/formatday.html',
-                {'link': self.get_link(day), 'day': day})
+                {'link': self.get_link(day), 'day': day,
+                    'today': datetime.today().day})
 
     def get_link(self, dt):
         """
