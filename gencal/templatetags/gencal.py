@@ -1,5 +1,5 @@
 from calendar import HTMLCalendar
-from datetime import date, datetime
+from datetime import datetime
 
 from django import template
 from django.template.loader import render_to_string
@@ -30,7 +30,7 @@ def gencal(obj_list, year=None, month=None, calendar_class=None):
     :returns: calendar as HTML
     :rtype: str.
     """
-    today = date.today()
+    today = datetime.today()
     if not year:
         year = today.year
     if not month:
@@ -78,7 +78,7 @@ class ListCalendar(HTMLCalendar):
     """
 
     def __init__(self, cal_items, year=None, month=None, *args, **kwargs):
-        today = date.today()
+        today = datetime.today()
 
         if year == None:
             year = today.year
