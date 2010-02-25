@@ -79,7 +79,7 @@ class ListCalendar(HTMLCalendar):
     """
 
     def __init__(self, cal_items, year=None, month=None, *args, **kwargs):
-        self.firstweekday = getattr(settings, 'CALENDAR_FIRST_WEEKDAY', 6) # 0 = Monday, 6 = Sunday
+        firstweekday = getattr(settings, 'CALENDAR_FIRST_WEEKDAY', 6)
 
         today = datetime.today()
 
@@ -93,7 +93,7 @@ class ListCalendar(HTMLCalendar):
 
         self.date_field = kwargs.pop('date_field', 'date')
 
-        super(ListCalendar, self).__init__(*args, **kwargs)
+        super(ListCalendar, self).__init__(firstweekday=firstweekday, *args, **kwargs)
 
         cal_arr = self.monthdatescalendar(year, month)
         month_dict = SortedDict()
@@ -122,8 +122,12 @@ class ListCalendar(HTMLCalendar):
         :arg weekday: Weekday of given day.
         :type weekday: int.
         """
+        if day.month == self.month:
+            day = day.day
+        else:
+            day = 0
         return render_to_string('gencal/formatday.html',
-                {'link': self.get_link(day), 'day': day.day})
+                {'link': self.get_link(day), 'day': day})
 
     def get_link(self, dt):
         """
