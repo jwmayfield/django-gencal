@@ -2,6 +2,7 @@ from calendar import HTMLCalendar
 from datetime import datetime
 
 from django import template
+from django.conf import settings
 from django.template.loader import render_to_string
 from django.utils.datastructures import SortedDict
 
@@ -78,6 +79,8 @@ class ListCalendar(HTMLCalendar):
     """
 
     def __init__(self, cal_items, year=None, month=None, *args, **kwargs):
+        self.firstweekday = getattr(settings, 'CALENDAR_FIRST_WEEKDAY', 6) # 0 = Monday, 6 = Sunday
+
         today = datetime.today()
 
         if year == None:
