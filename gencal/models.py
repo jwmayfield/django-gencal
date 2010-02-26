@@ -105,35 +105,6 @@ class GenericListCalendar(ListCalendar):
             if date:
                 self.month_dict[date].append(item)
 
-#    def formatday(self, day, weekday):
-#        """
-#        For each day (table cell) in the calendar, the following will be printed:
-#        - a hyperlink for each object (using the get_absolute_url if it is available)
-#        - the text of the above link will be displayed by calling the object's __unicode__ method.
-#        
-#        :arg day: A day to be formatted.
-#        :type day: date object.
-#        :arg weekday: Weekday of a given day.
-#        :type weekday: int.
-#        """
-#        link = self.get_link(day)
-#        day_content = '%d' % day.day
-#        if link:
-#            day_content = '<a href="%s">%d</a>' % (self.get_link(day), day.day)
-#        
-#        html_content = '%s' % day_content
-#        if len(self.month_dict[day]) > 0:
-#            html_content += '<ul>'
-#            for obj in self.month_dict[day]:
-#                try:
-#                    html_content += '<li><a href="%s">%s</a></li>' % (obj.get_absolute_url(), obj)
-#                except AttributeError:
-#                    # probably no get_absolute_url method.
-#                    html_content += '<li>%s</li>' % obj
-#            html_content += '</ul>'
-#        
-#        return '<td>%s</td>' % html_content
-
     def formatday(self, day, weekday):
         """
         Return a day as a table cell.
@@ -144,13 +115,13 @@ class GenericListCalendar(ListCalendar):
         :type weekday: int.
         """
         if day.month == self.month:
-            day = day.day
+            day_num = day.day
         else:
-            day = 0
+            day_num = 0
         object_list = [obj for obj in self.month_dict[day]]
         return render_to_string('gencal/formatday.html',
-                {'link': self.get_link(day), 'day': day,
-                    'today': datetime.today().day, 'object_list': object_list})
+                {'link': self.get_link(day), 'day': day_num,
+                    'today': day == self.today, 'object_list': object_list})
 
     def get_link(self, dt):
         return None

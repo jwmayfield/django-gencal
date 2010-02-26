@@ -82,6 +82,7 @@ class ListCalendar(HTMLCalendar):
         firstweekday = getattr(settings, 'CALENDAR_FIRST_WEEKDAY', 6)
 
         today = datetime.today()
+        self.today = today
 
         if year == None:
             year = today.year
@@ -123,12 +124,12 @@ class ListCalendar(HTMLCalendar):
         :type weekday: int.
         """
         if day.month == self.month:
-            day = day.day
+            day_num = day.day
         else:
-            day = 0
+            day_num = 0
         return render_to_string('gencal/formatday.html',
-                {'link': self.get_link(day), 'day': day,
-                    'today': datetime.today().day})
+                {'link': self.get_link(day), 'day': day_num,
+                    'today': day == self.today})
 
     def get_link(self, dt):
         """
