@@ -38,7 +38,7 @@ def gencal(obj_list, year=None, month=None, calendar_class=None):
         month = today.month
     if not calendar_class:
         calendar_class = ListCalendar
-    return calendar_class(obj_list).formatmonth(year, month)
+    return calendar_class(obj_list, year, month).formatmonth(year, month)
 
 class ListCalendar(HTMLCalendar):
     """
