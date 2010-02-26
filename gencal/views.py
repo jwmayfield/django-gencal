@@ -28,7 +28,8 @@ def calendar(request, calslug, year=None, month=None, day=None):
         object_list = []
 
     # Populate a dict to be used for the template's context
-    d = {'year':year, 'month':month, 'object_list':object_list, 'cal_class':GenericListCalendar }
+    d = {'slug':calslug, 'year':year, 'month':month, 'object_list':object_list,
+            'cal_class':GenericListCalendar }
 
     return render_to_response('gencal/calendar.html', d, context_instance=RequestContext(request))
 

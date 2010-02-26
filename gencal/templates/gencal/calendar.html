@@ -9,7 +9,7 @@
 {% block content %}
     {% load gencal %}    
     {% if object_list %}
-        {% gencal object_list year month cal_class %}
+        {% gencal object_list slug year month cal_class %}
     {% else %}
         {# object_list is empty, so use the template tag without any arguments. #}
         {% gencal object_list  %}
