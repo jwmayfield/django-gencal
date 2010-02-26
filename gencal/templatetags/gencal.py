@@ -184,7 +184,8 @@ class ListCalendar(HTMLCalendar):
         return render_to_string('gencal/formatweekheader.html',
                 {'weekdays': weekdays})
 
-    def formatmonthname(self, theyear, themonth, withyear=True):
+    def formatmonthname(self, theyear, themonth, withyear=True, prev='',
+            next=''):
         """
         Return a month name as a table row.
         """
@@ -194,7 +195,8 @@ class ListCalendar(HTMLCalendar):
         else:
             s = '%s' % month_name[themonth]
         return render_to_string('gencal/formatmonthname.html',
-                {'month_name': s})
+                {'month_name': s, 'prev_month_link': prev,
+                    'next_month_link': next})
 
     def formatmonth(self, slug, theyear, themonth, withyear=True):
         """
@@ -212,14 +214,15 @@ class ListCalendar(HTMLCalendar):
         """
         weeks = [self.formatweek(week) for week in
                 self.monthdates2calendar(theyear, themonth)]
-        prev_month_link = reverse('genericcalendar-month', args=[slug,
-            theyear if themonth - 1 >= 1 else theyear - 1,
-            themonth - 1 if themonth - 1 >= 1 else 12])
-        next_month_link = reverse('genericcalendar-month', args=[slug,
-            theyear if themonth + 1 <= 12 else theyear + 1,
-            themonth + 1 if themonth + 1 <= 12 else 1])
+        prev_month_link = '%s%d/%02d/' % (reverse('genericcalendar-default',
+            args=[slug]), theyear if themonth - 1 >= 1 else theyear - 1,
+            themonth - 1 if themonth - 1 >= 1 else 12)
+        next_month_link = '%s%d/%02d/' % (reverse('genericcalendar-default',
+            args=[slug]), theyear if themonth + 1 <= 12 else theyear + 1,
+            themonth + 1 if themonth + 1 <= 12 else 1)
         return render_to_string('gencal/formatmonth.html',
                 {'month_name': self.formatmonthname(theyear, themonth,
-                    withyear=withyear), 'week_header': self.formatweekheader(),
+                    withyear=withyear, prev=prev_month_link,
+                    next=next_month_link), 'week_header': self.formatweekheader(),
                     'weeks': weeks, 'prev_month_link': prev_month_link,
                     'next_month_link': next_month_link})
