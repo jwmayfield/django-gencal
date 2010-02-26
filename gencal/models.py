@@ -2,7 +2,6 @@ import datetime
 from django.core.exceptions import FieldError
 from django.db import models
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.contenttypes import generic
 
 from templatetags.gencal import ListCalendar
 #TODO: Would it make more sense for ListCalendar to be defined here?
