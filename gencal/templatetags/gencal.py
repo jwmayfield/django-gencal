@@ -82,7 +82,7 @@ class ListCalendar(HTMLCalendar):
         firstweekday = getattr(settings, 'CALENDAR_FIRST_WEEKDAY', 6)
 
         today = datetime.today()
-        self.today = today
+        self.today = today.date()
 
         if year == None:
             year = today.year
