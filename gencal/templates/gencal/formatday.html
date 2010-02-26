@@ -1,5 +1,30 @@
 {% if link %}
-	<td><a href="{{ link }}">{{ day }}</a></td>
+	<td>
+		<a href="{{ link }}">{{ day }}</a>
+		{% if object_list %}
+			<ul>
+				{% for obj in object_list %}
+					{% if obj.get_absolute_url %}
+						<li><a href="{{ obj.get_absolute_url }}">{{ obj }}</a></li>
+					{% else %}
+						<li>{{ obj }}</li>
+					{% endif %}
+				{% endfor %}
+			</ul>
+		{% endif %}
+	</td>
 {% else %}
-	<td>{{ day }}</td>
+	<td>{{ day }}
+		{% if object_list %}
+			<ul>
+				{% for obj in object_list %}
+					{% if obj.get_absolute_url %}
+						<li><a href="{{ obj.get_absolute_url }}">{{ obj }}</a></li>
+					{% else %}
+						<li>{{ obj }}</li>
+					{% endif %}
+				{% endfor %}
+			</ul>
+		{% endif %}
+	</td>
 {% endif %}
