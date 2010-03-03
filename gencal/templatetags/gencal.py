@@ -115,7 +115,7 @@ class ListCalendar(HTMLCalendar):
                 month_dict[possible_date].append(item)
         self.month_dict = month_dict
 
-    def formatday(self, day, weekday):
+    def formatday(self, day, weekday, template='gencal/formatday.html'):
         """
         Return a day as a table cell.
 
@@ -128,7 +128,7 @@ class ListCalendar(HTMLCalendar):
             day_num = day.day
         else:
             day_num = 0
-        return render_to_string('gencal/formatday.html',
+        return render_to_string(template,
                 {'link': self.get_link(day), 'day': day_num,
                     'today': day == self.today})
 
@@ -161,31 +161,31 @@ class ListCalendar(HTMLCalendar):
         """
         return [[(dt, dt.weekday()) for dt in week] for week in self.monthdatescalendar(year, month)]
 
-    def formatweek(self, theweek):
+    def formatweek(self, theweek, template='gencal/formatweek.html'):
         """
         Return a complete week as a table row.
         """
         days = [self.formatday(d, wd) for (d, wd) in theweek]
-        return render_to_string('gencal/formatweek.html', {'days': days})
+        return render_to_string(template, {'days': days})
 
-    def formatweekday(self, day):
+    def formatweekday(self, day, template='gencal/formatweekday.html'):
         """
         Return a weekday name as a table header.
         """
         from calendar import day_abbr
-        return render_to_string('gencal/formatweekday.html',
+        return render_to_string(template,
                 {'class': self.cssclasses[day], 'weekday': day_abbr[day]})
 
-    def formatweekheader(self):
+    def formatweekheader(self, template='gencal/formatweekheader.html'):
         """
         Return a header for a week as a table row.
         """
         weekdays = [self.formatweekday(i) for i in self.iterweekdays()]
-        return render_to_string('gencal/formatweekheader.html',
+        return render_to_string(template,
                 {'weekdays': weekdays})
 
     def formatmonthname(self, theyear, themonth, withyear=True, prev='',
-            next=''):
+            next='', template='gencal/formatmonthname.html'):
         """
         Return a month name as a table row.
         """
@@ -194,11 +194,12 @@ class ListCalendar(HTMLCalendar):
             s = '%s %s' % (month_name[themonth], theyear)
         else:
             s = '%s' % month_name[themonth]
-        return render_to_string('gencal/formatmonthname.html',
+        return render_to_string(template,
                 {'month_name': s, 'prev_month_link': prev,
                     'next_month_link': next})
 
-    def formatmonth(self, slug, theyear, themonth, withyear=True):
+    def formatmonth(self, slug, theyear, themonth, withyear=True,
+            template='gencal/formatmonth.html'):
         """
         Return a formatted month as a table.
 
@@ -220,7 +221,7 @@ class ListCalendar(HTMLCalendar):
         next_month_link = '%s%d/%02d/' % (reverse('genericcalendar-default',
             args=[slug]), theyear if themonth + 1 <= 12 else theyear + 1,
             themonth + 1 if themonth + 1 <= 12 else 1)
-        return render_to_string('gencal/formatmonth.html',
+        return render_to_string(template,
                 {'month_name': self.formatmonthname(theyear, themonth,
                     withyear=withyear, prev=prev_month_link,
                     next=next_month_link), 'week_header': self.formatweekheader(),

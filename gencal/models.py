@@ -105,7 +105,7 @@ class GenericListCalendar(ListCalendar):
             if date:
                 self.month_dict[date].append(item)
 
-    def formatday(self, day, weekday):
+    def formatday(self, day, weekday, template='gencal/formatday.html'):
         """
         Return a day as a table cell.
 
@@ -119,7 +119,7 @@ class GenericListCalendar(ListCalendar):
         else:
             day_num = 0
         object_list = [obj for obj in self.month_dict[day]]
-        return render_to_string('gencal/formatday.html',
+        return render_to_string(template,
                 {'link': self.get_link(day), 'day': day_num,
                     'today': day == self.today, 'object_list': object_list})
 
