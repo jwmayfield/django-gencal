@@ -118,7 +118,10 @@ class GenericListCalendar(ListCalendar):
             day_num = day.day
         else:
             day_num = 0
-        object_list = [obj for obj in self.month_dict[day]]
+        if day in self.month_dict:
+            object_list = [obj for obj in self.month_dict[day]]
+        else:
+            object_list = []
         return render_to_string(template,
                 {'link': self.get_link(day), 'day': day_num,
                     'today': day == self.today, 'object_list': object_list})
