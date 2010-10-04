@@ -124,7 +124,8 @@ class GenericListCalendar(ListCalendar):
             object_list = []
         return render_to_string(template,
                 {'link': self.get_link(day), 'day': day_num,
-                    'today': day == self.today, 'object_list': object_list})
+                    'today': day == self.today, 'object_list': object_list,
+                    'weekday': weekday})
 
     def get_link(self, dt):
         return None
