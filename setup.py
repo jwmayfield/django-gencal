@@ -21,6 +21,6 @@ setup(
         'Programming Language :: Python',
         'Framework :: Django',
     ],
-    packages=['gencal'],
+    packages=find_packages(),
     zip_safe=False,
 )
